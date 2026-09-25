@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Sapphire CompileBox</title>
+<style>
+:root{
+  --text:#202122; --bg:#fff; --bg-2:#f8f9fa; --border:#a2a9b1; --link:#3366cc;
+  --accent:#36c; --muted:#54595d; --mono:Consolas,Menlo,monospace; --sans:sans-serif; --serif:Georgia,serif;
+  box-sizing:border-box; padding-top:env(safe-area-inset-top,0px); padding-bottom:env(safe-area-inset-bottom,0px);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){ --text:#eaecf0; --bg:#101418; --bg-2:#181d22; --border:#3a4045; --link:#7aa5e8; --muted:#a2a9b1; }
+}
+:root[data-theme="dark"]{ --text:#eaecf0; --bg:#101418; --bg-2:#181d22; --border:#3a4045; --link:#7aa5e8; --muted:#a2a9b1; }
+html{scroll-padding-top:env(safe-area-inset-top,0px); height:100%;}
+*{box-sizing:border-box;}
+body{margin:0; min-height:100%; background:var(--bg); color:var(--text); font-family:var(--sans); font-size:14px;}
+a{color:var(--link);}
+header{border-bottom:1px solid var(--border); padding:.7rem 1rem;}
+header h1{font-family:var(--serif); font-size:1.3rem; margin:0; font-weight:normal; border-bottom:1px solid var(--border); padding-bottom:.15rem; display:inline-block;}
+header p{margin:.3rem 0 0; font-size:.8rem; color:var(--muted);}
+.tabs{display:flex; border-bottom:1px solid var(--border); background:var(--bg-2);}
+.tabs button{font-family:var(--sans); font-size:.85rem; background:none; border:none; border-right:1px solid var(--border); padding:.5rem 1rem; cursor:pointer; color:var(--text);}
+.tabs button[aria-selected="true"]{background:var(--bg); font-weight:bold; border-bottom:2px solid var(--accent); margin-bottom:-1px;}
+.layout{display:flex; min-height:60vh;}
+nav#list{width:190px; flex:0 0 auto; border-right:1px solid var(--border); background:var(--bg-2); overflow-x:auto;}
+nav#list ul{list-style:none; margin:0; padding:0;}
+nav#list li{border-bottom:1px solid var(--border);}
+nav#list button{width:100%; text-align:left; background:none; border:none; padding:.5rem .7rem; cursor:pointer; color:var(--link); font-size:.85rem; font-family:var(--sans); white-space:nowrap;}
+nav#list button.active{background:var(--bg); font-weight:bold; color:var(--text);}
+nav#list button.start::after{content:" (start)"; color:var(--muted); font-weight:normal;}
+#addPassage{width:100%; padding:.5rem .7rem; text-align:left; background:none; border:none; border-bottom:1px solid var(--border); cursor:pointer; color:var(--text); font-size:.85rem;}
+main{flex:1; min-width:0; padding:1rem;}
+.field{margin-bottom:.9rem;}
+.field label{display:block; font-size:.75rem; color:var(--muted); margin-bottom:.2rem;}
+.toolbar{display:flex; gap:.4rem; flex-wrap:wrap; margin-bottom:.4rem;}
+.toolbar button{font-family:var(--sans); font-size:.78rem; padding:.3rem .6rem; border:1px solid var(--border); background:var(--bg-2); color:var(--text); cursor:pointer; border-radius:2px;}
+"<div id=\"play\"></div>\n<script>\nconst DATA = " + data + ";\n" +
+"const SET_RE=/\\{\\{set:([a-zA-Z0-9_]+)=([^}]*)\\}\\}/g;\n" +
+"const GET_RE=/\\{\\{get:([a-zA-Z0-9_]+)\\}\\}/g;\n" +
+"const passages=DATA.passages;let vars={};let currentId=DATA.startId;\n" +
+"const playEl=document.getElementById('play');\n" +
+"function current(){let raw=(passages[currentId]&&passages[currentId].text)||'';\n" +
+"raw=raw.replace(SET_RE,(_,k,v)=>{vars[k]=v;return '';});\n" +
+"raw=raw.replace(GET_RE,(_,k)=>vars[k]!==undefined?vars[k]:'');\n" +
+"const paragraphs=raw.split('\\n\\n').map(s=>s.trim()).filter(Boolean);\n" +
+"const choices=(passages[currentId]&&passages[currentId].choices)||[];\n" +
+"return {id:currentId,paragraphs,choices};}\n" +
+"function goto(id){currentId=id;render();}\n" +
+"function restart(){vars={};currentId=DATA.startId;render();}\n" +
+"function render(){const passage=current();playEl.innerHTML='';\n" +
+"passage.paragraphs.forEach(para=>{const el=document.createElement('p');el.textContent=para;playEl.appendChild(el);});\n" +
+"if(passage.choices.length){const ul=document.createElement('ul');ul.className='choices';\n" +
+"passage.choices.forEach(choice=>{const li=document.createElement('li');const btn=document.createElement('button');\n" +
+"btn.className='choice';btn.textContent=choice.label;btn.addEventListener('click',()=>goto(choice.target));\n" +
+"li.appendChild(btn);ul.appendChild(li);});playEl.appendChild(ul);}\n" +
+"const meta=document.createElement('div');meta.className='meta';meta.textContent='passage: '+passage.id;playEl.appendChild(meta);\n" +
+"const r=document.createElement('button');r.className='restart';r.textContent='\\u21ba restart';r.addEventListener('click',restart);playEl.appendChild(r);}\n" +
+"restart();\n<\/script></body></html>";
+  const blob = new Blob([html], { type: "text/html" });
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(blob);
+  a.download = "game.html";
+  document.body.appendChild(a); a.click(); a.remove();
+  URL.revokeObjectURL(a.href);
+  const status = document.getElementById("compileStatus");
+  status.textContent = "✓ Compiled — game.html downloaded";
+  setTimeout(() => { status.textContent = ""; }, 4000);
+});
+
+/* ---------------- Init ---------------- */
+selectPassage(currentId);
+</script>
+</body>
+  </html>
+  
