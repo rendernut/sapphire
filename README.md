@@ -10,3 +10,6 @@ check out [USAGE](USAGE-1.md)
 
 # version
 version 1.0 nightly. up for testing and bug report
+
+# i wanna test!
+wanna test out games or demos i made in Sapphire? check out I Wanna Test website (available soon)
