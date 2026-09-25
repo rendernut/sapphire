@@ -9,7 +9,7 @@ To provide easier development for developers who want to make a text based novel
 check out [USAGE](USAGE-1.md)
 
 # version
-version 1.0 nightly. up for testing and bug report
+version 1.0 canary up for testing and bug report
 
 # i wanna test!
 wanna test out games or demos i made in Sapphire? check out I Wanna Test website (available soon)
