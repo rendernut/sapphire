@@ -6,7 +6,7 @@ A small JavaScript framework for branching text stories — passages, links, and
 To provide easier development for developers who want to make a text based novel.
 
 # how to use?
-check USAGE.md
+check out [USAGE](USAGE-1.md)
 
 # version
 version 1.0 nightly. up for testing and bug report
