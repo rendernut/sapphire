@@ -9,4 +9,4 @@ To provide easier development for developers who want to make a text based novel
 check USAGE.md
 
 # version
-currently at Beta testing under codename Project Loom.
+version 1.0 nightly. up for testing and bug report
